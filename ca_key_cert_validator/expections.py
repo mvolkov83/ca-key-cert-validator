@@ -41,3 +41,7 @@ class CertificateNotMatchKeyValidationError(CertificateValidationError):
 
 class CertificateSignatureValidationError(CertificateValidationError):
     MESSAGE = 'Certificate signature validation error'
+
+
+class CertificateIsNotCAValidationError(CertificateValidationError):
+    MESSAGE = 'Certificate is not CA'

@@ -30,6 +30,11 @@ def validate_key_from_bytes(data: bytes, password: bytes = None) -> PrivateKey:
     )
 
 
+def validate_certificate_ca_constraint(certificate: x509.Certificate) -> None:
+    if not certificate.extensions.get_extension_for_class(x509.BasicConstraints).value.ca:
+        raise expections.CertificateIsNotCAValidationError()
+
+
 def validate_certificate(
         certificate: x509.Certificate,
         key: rsa.RSAPrivateKey
@@ -48,6 +53,8 @@ def validate_certificate(
         )
     except InvalidSignature:
         raise expections.CertificateSignatureValidationError()
+
+    validate_certificate_ca_constraint(certificate)
 
     return Certificate(
         certificate=certificate,
