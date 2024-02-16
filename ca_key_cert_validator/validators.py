@@ -3,7 +3,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.exceptions import InvalidSignature
 
-from .sctructures import PrivateKey, Certificate
+from .structures import PrivateKey, Certificate
 from .loaders import load_key_from_bytes, load_cert_from_bytes
 from .savers import private_key_to_bytes, private_key_to_bytes_with_password, certificate_to_bytes
 from . import expections
