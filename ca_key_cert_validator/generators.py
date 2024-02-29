@@ -20,22 +20,34 @@ def build_and_sign_certificate(
         ca_key: rsa.RSAPrivateKey = None,
         subject: str = 'test subject',
         issuer: str = 'test issuer',
-        days_valid: int = 365
+        not_valid_before: datetime = None,
+        not_valid_after: datetime = None,
+        days_valid: int = 365,
+        is_ca: bool = True
 ) -> x509.Certificate:
     public_key = private_key.public_key()
     if not ca_key:
         ca_key = private_key
 
+    if not_valid_before is None:
+        not_valid_before = datetime.utcnow()
+
+    if not_valid_after is None:
+        not_valid_after = not_valid_before + timedelta(days=days_valid)
+
     builder = x509.CertificateBuilder()
     builder = builder.subject_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, subject)]))
     builder = builder.issuer_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, issuer)]))
-    builder = builder.not_valid_before(datetime.utcnow())
-    builder = builder.not_valid_after(datetime.utcnow() + timedelta(days=days_valid))
+    builder = builder.not_valid_before(not_valid_before)
+    builder = builder.not_valid_after(not_valid_after)
     builder = builder.serial_number(x509.random_serial_number())
     builder = builder.public_key(public_key)
-    builder = builder.add_extension(
-        x509.BasicConstraints(ca=True, path_length=None), critical=True,
-    )
+
+    if is_ca:
+        builder = builder.add_extension(
+            x509.BasicConstraints(ca=True, path_length=None), critical=True,
+        )
+
     builder = builder.add_extension(
         x509.SubjectKeyIdentifier.from_public_key(public_key),
         critical=False

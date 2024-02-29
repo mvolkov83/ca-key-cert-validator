@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ca-key-cert-validator"
-version = "0.1.2"
+version = "0.1.3"
 description = "Toolset for validation of CA Key & Cert pair"
 authors = ["Volkov Mykhailo <mvolkov83@gmail.com>"]
 license = "GPL"

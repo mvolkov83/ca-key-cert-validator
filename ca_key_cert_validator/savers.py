@@ -18,9 +18,12 @@ def private_key_to_bytes_with_password(private_key: rsa.RSAPrivateKey, password:
     )
 
 
-def private_key_to_pem(private_key: rsa.RSAPrivateKey, filename: str) -> None:
+def private_key_to_pem(private_key: rsa.RSAPrivateKey, filename: str, password: bytes = None) -> None:
     with open(filename, 'wb') as f:
-        f.write(private_key_to_bytes(private_key))
+        if not password:
+            f.write(private_key_to_bytes(private_key))
+        else:
+            f.write(private_key_to_bytes_with_password(private_key, password))
 
 
 def certificate_to_bytes(certificate) -> bytes:

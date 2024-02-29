@@ -2,6 +2,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.exceptions import InvalidSignature
+from cryptography.x509.extensions import ExtensionNotFound
 
 from .structures import PrivateKey, Certificate
 from .loaders import load_key_from_bytes, load_cert_from_bytes
@@ -31,7 +32,10 @@ def validate_key_from_bytes(data: bytes, password: bytes = None) -> PrivateKey:
 
 
 def validate_certificate_ca_constraint(certificate: x509.Certificate) -> None:
-    if not certificate.extensions.get_extension_for_class(x509.BasicConstraints).value.ca:
+    try:
+        if not certificate.extensions.get_extension_for_class(x509.BasicConstraints).value.ca:
+            raise expections.CertificateIsNotCAValidationError()
+    except ExtensionNotFound:
         raise expections.CertificateIsNotCAValidationError()
 
 

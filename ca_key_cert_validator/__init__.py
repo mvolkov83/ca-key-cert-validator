@@ -10,6 +10,7 @@ from .expections import (
     CertificateInvalidFormatValidationError,
     CertificateNotMatchKeyValidationError,
     CertificateSignatureValidationError,
+    CertificateIsNotCAValidationError,
 )
 
 __all__ = [
@@ -27,4 +28,5 @@ __all__ = [
     'CertificateInvalidFormatValidationError',
     'CertificateNotMatchKeyValidationError',
     'CertificateSignatureValidationError',
+    'CertificateIsNotCAValidationError',
 ]
